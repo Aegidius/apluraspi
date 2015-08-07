@@ -1,5 +1,4 @@
 # Button1.py
-# modified
 
 from raspibrick import *
 

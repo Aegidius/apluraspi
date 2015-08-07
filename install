@@ -1,0 +1,51 @@
+#! /bin/sh
+# Install script for RaspiBrick
+
+echo Running RaspiBrick installation. Version 1.1 - Aug. 6, 2015
+
+# Display commands
+set -x
+
+echo Patching OS for fast SSH login
+sudo sed -i 's|files mdns4_minimal \\[NOTFOUND=return\\] dns mdns4|files mdns4_minimal \\[NOTFOUND=return\\] dns|' /etc/nsswitch.conf
+
+echo Installing Linux software
+sudo apt-get install i2c-tools
+sudo apt-get install python-smbus
+
+
+echo Move files
+sudo mv /home/pi/brickgate/modules /etc/modules
+
+chmod +x /home/pi/brickgate/jrun
+sudo mv /home/pi/brickgate/jrun /usr/bin
+
+chmod +x /home/pi/brickgate/jrun.sh
+
+chmod +x /home/pi/brickgate/python
+sudo mv /home/pi/brickgate/python /usr/bin
+
+chmod +x /home/pi/brickgate/rmon
+sudo mv /home/pi/brickgate/rmon /usr/bin
+
+chmod +x /home/pi/brickgate/rkill
+sudo mv /home/pi/brickgate/rkill /usr/bin
+
+chmod +x /home/pi/brickgate/RaspiBrickStart
+sudo mv /home/pi/brickgate/RaspiBrickStart /etc/init.d
+
+chmod +x /home/pi/brickgate/autostart.sh
+
+echo Install autostart
+sudo update-rc.d RaspiBrickStart defaults
+
+echo Mount FAT partition
+sudo mkdir /mnt/recovery
+sudo mount /dev/mmcblk0p1 /mnt/recovery
+
+echo Copy RaspiBrickConfig.jar
+chmod +x /home/pi/brickgate/RaspiBrickConfig.jar
+sudo cp /home/pi/brickgate/RaspiBrickConfig.jar  /mnt/recovery/RaspiBrickConfig.jar
+
+echo Copy wpa_supplicant.conf
+sudo cp /etc/wpa_supplicant/wpa_supplicant.conf  /mnt/recovery/wpa_supplicant.conf

@@ -1,0 +1,4 @@
+#! /bin/sh
+
+sudo pkill python
+python /home/pi/brickgate/ResetLED.py
